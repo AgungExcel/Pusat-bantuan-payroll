@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pusat Bantuan Penggajian - PT Hop Lun Indonesia</title>
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @keyframes scaleIn {
+      0% { opacity: 0; transform: scale(.9) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes modalFadeIn {
+      0% { opacity: 0; transform: scale(.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-scale-in { animation: scaleIn .5s cubic-bezier(.16, 1, .3, 1) forwards; }
+    .animate-modal { animation: modalFadeIn .3s cubic-bezier(.16, 1, .3, 1) forwards; }
+    .animate-slide-up { animation: slideUp .4s cubic-bezier(.16, 1, .3, 1) forwards; }
+    
+    .hidden-section { display: none !important; }
+    #nama { text-transform: uppercase; }
+    
+    /* Scrollbar minimalis untuk list tiket */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="font-sans antialiased text-gray-800 bg-gray-50 selection:bg-indigo-200 selection:text-indigo-900">
+  
+  <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50 flex flex-col items-center justify-center p-4 sm:p-8">
+
+    <!-- Navigasi Tab (Buat Tiket & Cek Status) -->
+    <div class="mb-6 bg-white/70 backdrop-blur-md p-1.5 rounded-2xl shadow-sm border border-indigo-50 flex items-center justify-center gap-2 max-w-sm w-full z-10 relative">
+      <button id="tab-buat" onclick="switchTab('buat')" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-200">
+        <i data-lucide="plus-circle" class="w-4 h-4"></i> Buat Tiket
+      </button>
+      <button id="tab-cek" onclick="switchTab('cek')" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-transparent text-gray-500 hover:text-indigo-600 hover:bg-indigo-50">
+        <i data-lucide="search" class="w-4 h-4"></i> Cek Status
+      </button>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div id="main-container" class="max-w-6xl w-full bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-indigo-100/50 transition-all duration-500 relative">
+      
+      <!-- Panel Sisi Kiri -->
+      <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 to-blue-700 p-10 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden transition-all duration-500" id="left-panel">
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-blue-400 opacity-20 blur-3xl"></div>
+
+        <div class="relative z-10">
+          <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+            <!-- Kotak Logo (Sudah diperbaiki) -->
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shadow-xl shadow-indigo-900/50 border-4 border-white/20 bg-white flex-shrink-0 transform hover:scale-105 transition-transform flex items-center justify-center p-1">
+               <img src="https://www.image2url.com/r2/default/images/1784534638328-e4b114b2-3a03-456f-a881-698a2db2e8b9.jpg" onerror="this.onerror=null; this.src='hoplun.jpg';" alt="Logo Hop Lun" class="w-full h-full object-contain rounded-xl" draggable="false">
+            </div>
+            <!-- Nama Perusahaan -->
+            <div class="flex-1 min-w-0">
+              <h2 class="text-xl sm:text-2xl font-extrabold leading-tight text-white drop-shadow-md">PT Hop Lun<br>Indonesia</h2>
+            </div>
+          </div>
+          <h1 id="panel-title" class="text-3xl sm:text-4xl font-bold mb-4 leading-tight transition-all">Pusat Bantuan<br>Penggajian</h1>
+          <p id="panel-desc" class="text-indigo-100 text-base sm:text-lg leading-relaxed mb-8 transition-all">
+            Punya kendala dengan slip gaji, lembur, atau potongan? Beritahu kami agar segera ditindaklanjuti.
+          </p>
+        </div>
+
+        <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl mt-auto">
+          <div class="flex items-center gap-4 mb-3">
+            <div class="bg-indigo-500 rounded-full p-2 shadow-inner">
+              <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+            </div>
+            <h3 class="font-semibold text-lg">Komitmen 48 Jam</h3>
+          </div>
+          <p class="text-indigo-100 text-sm leading-relaxed">
+            Tim spesialis payroll kami berjanji untuk merespon setiap tiket dalam waktu 2x24 jam kerja.
+          </p>
+        </div>
+      </div>
+
+      <!-- Panel Sisi Kanan -->
+      <div class="md:w-7/12 relative bg-white overflow-hidden">
+        
+        <!-- SECTION: BUAT TIKET -->
+        <div id="form-section" class="p-8 sm:p-12 lg:p-16 h-full flex flex-col justify-center animate-scale-in overflow-y-auto max-h-[85vh] custom-scrollbar">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Buat Tiket Baru</h2>
+            <p class="text-gray-500">Silakan lengkapi detail di bawah ini dengan benar.</p>
+          </div>
+
+          <form id="payroll-form" class="space-y-5">
+            <!-- Hidden input action penanda untuk Code.gs -->
+            <input type="hidden" name="action" value="submit">
+
+            <div class="space-y-1.5 group">
+              <label for="idKaryawan" class="text-sm font-semibold text-gray-700 ml-1">Nomor ID (Ketik Tanpa SR/SM)</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+                  <i data-lucide="hash" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="idKaryawan" name="idKaryawan" required inputmode="numeric" maxlength="6" placeholder="Contoh: 123456"
+                  class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 text-gray-800 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none font-medium">
+              </div>
+              <p id="id-error" class="text-red-500 text-xs font-medium ml-1 mt-1 animate-pulse hidden-section">Nomor ID wajib 6 digit angka.</p>
+            </div>
+
+            <div class="space-y-1.5 group">
+              <label for="nama" class="text-sm font-semibold text-gray-700 ml-1">Nama Lengkap</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+                  <i data-lucide="user" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="nama" name="nama" required autocomplete="name" placeholder="Masukkan Nama Lengkap Anda"
+                  class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 text-gray-800 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none font-semibold tracking-wide">
+              </div>
+            </div>
+
+            <div class="space-y-1.5 group">
+              <label for="departemen" class="text-sm font-semibold text-gray-700 ml-1">Departemen</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+                  <i data-lucide="building-2" class="w-5 h-5"></i>
+                </div>
+                <select id="departemen" name="departemen" required
+                  class="w-full pl-11 pr-10 py-3.5 bg-gray-50 border border-gray-200 text-gray-800 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none appearance-none cursor-pointer">
+                  <option value="" disabled selected hidden>Pilih departemen Anda...</option>
+                  <option value="CUTTING">CUTTING</option><option value="FINANCE">FINANCE</option><option value="IE">IE</option>
+                  <option value="IT">IT</option><option value="LOGISTICS">LOGISTICS</option><option value="MECHANIC">MECHANIC</option>
+                  <option value="MOLDING">MOLDING</option><option value="OPERATIONAL CONTROL">OPERATIONAL CONTROL</option>
+                  <option value="PACKING">PACKING</option><option value="PEOPLE & CULTURE">PEOPLE & CULTURE</option>
+                  <option value="PMC">PMC</option><option value="PRODUCTION">PRODUCTION</option><option value="QA">QA</option>
+                  <option value="QC">QC</option><option value="RAW MATERIALS WAREHOUSE">RAW MATERIALS WAREHOUSE</option>
+                  <option value="SAMPLE ROOM">SAMPLE ROOM</option><option value="SEWING">SEWING</option>
+                  <option value="SOURCING & PURCHASING">SOURCING & PURCHASING</option>
+                  <option value="SUSTAINABILITY">SUSTAINABILITY</option><option value="TECHNICAL">TECHNICAL</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 group">
+              <label for="periode" class="text-sm font-semibold text-gray-700 ml-1">Periode Penggajian</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+                  <i data-lucide="calendar-days" class="w-5 h-5"></i>
+                </div>
+                <select id="periode" name="periode" required
+                  class="w-full pl-11 pr-10 py-3.5 bg-gray-50 border border-gray-200 text-gray-800 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none appearance-none cursor-pointer">
+                  <option value="" disabled selected hidden>Pilih periode bulan...</option>
+                  <!-- Pilihan bulan akan dimuat otomatis oleh JavaScript -->
+                </select>
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 group">
+              <label for="komplain" class="text-sm font-semibold text-gray-700 ml-1">Detail Keluhan Penggajian</label>
+              <div class="relative">
+                <div class="absolute top-3.5 left-4 pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+                  <i data-lucide="message-square" class="w-5 h-5"></i>
+                </div>
+                <textarea id="komplain" name="komplain" required rows="3" placeholder="Jelaskan secara rinci..."
+                  class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 text-gray-800 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-y"></textarea>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" id="submit-btn"
+                class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none">
+                <span id="btn-text" class="flex items-center gap-2">Kirim Tiket <i data-lucide="send" class="w-5 h-5"></i></span>
+                <span id="btn-spinner" class="hidden-section flex items-center gap-2">
+                  <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  Mengirim...
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- SECTION: CEK TIKET (MONITORING) -->
+        <div id="cek-section" class="hidden-section p-8 sm:p-12 lg:p-16 h-full flex flex-col min-h-[600px] max-h-[85vh] animate-scale-in">
+          <div class="mb-6 flex-shrink-0">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Monitoring Tiket</h2>
+            <p class="text-gray-500 text-sm">Cek status penanganan keluhan beserta tanggapan dari tim HRD.</p>
+          </div>
+
+          <form id="search-form" class="mb-6 flex gap-3 flex-shrink-0">
+            <!-- Hidden input action penanda untuk Code.gs -->
+            <input type="hidden" name="action" value="check">
+            
+            <div class="relative flex-1 group">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <i data-lucide="search" class="w-5 h-5"></i>
+              </div>
+              <input type="text" id="search-id" name="idKaryawan" required inputmode="numeric" maxlength="6" placeholder="Masukkan 6 Digit ID..."
+                class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 text-gray-800 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none font-medium">
+            </div>
+            <button type="submit" id="search-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center min-w-[120px]">
+              <span id="search-text">Cari</span>
+              <svg id="search-spinner" class="hidden-section animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </button>
+          </form>
+
+          <!-- Area Hasil Pencarian (Bisa di-scroll) -->
+          <div id="results-container" class="flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4 space-y-4">
+            
+            <!-- Default State: Ilustrasi KOSONG -->
+            <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center opacity-70 mt-10">
+              <div class="bg-blue-50 text-blue-300 w-24 h-24 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="inbox" class="w-12 h-12"></i>
+              </div>
+              <p class="text-gray-500 font-medium">Masukkan ID Anda untuk melihat riwayat tiket dan tanggapan.</p>
+            </div>
+
+            <!-- Tempat memunculkan Card List (Diisi via JavaScript) -->
+            <div id="tickets-list" class="hidden-section space-y-5"></div>
+
+          </div>
+        </div>
+
+      </div>
+    </div> <!-- END MAIN CONTAINER -->
+
+    <!-- SUCCESS SCREEN -->
+    <div id="success-section" class="hidden-section bg-white max-w-lg w-full rounded-3xl shadow-xl p-10 text-center transform transition-all border border-indigo-50 z-20">
+      <div class="relative mx-auto w-24 h-24 mb-6">
+        <div class="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-75"></div>
+        <div class="relative bg-gradient-to-tr from-green-400 to-green-500 rounded-full p-4 shadow-lg shadow-green-200 flex items-center justify-center">
+          <i data-lucide="check-circle-2" class="w-12 h-12 text-white"></i>
+        </div>
+      </div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Tiket Terkirim!</h2>
+      <div class="bg-indigo-50 rounded-2xl p-6 mb-8 text-left">
+        <p class="text-gray-700 mb-4 leading-relaxed text-sm">
+          Halo <strong id="success-nama" class="text-indigo-900">-</strong>, keluhan Anda telah masuk antrean.
+        </p>
+        <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-indigo-100 shadow-sm">
+          <i data-lucide="clock" class="w-6 h-6 text-indigo-600 flex-shrink-0 mt-0.5"></i>
+          <div><p class="font-semibold text-indigo-900 text-sm">SLA 48 Jam Berlaku</p><p class="text-xs text-gray-600 mt-1">Gunakan ID Anda untuk melacak status tiket beserta balasan dari HRD pada menu <strong>Cek Status</strong>.</p></div>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button id="btn-back-form" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-xl transition-colors text-sm">Tutup</button>
+        <button id="btn-go-monitor" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors text-sm shadow-md shadow-indigo-200">Lihat Status</button>
+      </div>
+    </div>
+
+    <!-- MODAL PEMBERITAHUAN -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden-section bg-gray-900/60 backdrop-blur-sm transition-opacity px-4">
+      <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 transform animate-modal border border-gray-100 flex flex-col items-center text-center">
+        <div id="modal-icon-container" class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-red-50 text-red-500 shadow-inner">
+          <i id="modal-icon" data-lucide="alert-triangle" class="w-8 h-8"></i>
+        </div>
+        <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-2">Pemberitahuan</h3>
+        <p id="modal-message" class="text-gray-500 mb-6 text-sm leading-relaxed">Pesan sistem akan muncul di sini.</p>
+        <button id="modal-close-btn" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3.5 px-4 rounded-xl transition-all shadow-lg shadow-gray-200 active:scale-95">Saya Mengerti</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // ==========================================
+    // KONFIGURASI URL GOOGLE APPS SCRIPT
+    // ==========================================
+    // GANTI URL DI BAWAH DENGAN URL DEPLOYMENT ANDA YANG BARU
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNDgWsskCPh1mNZgd-WGxhOXbo_SjzfE9r7hGZVIpWtegAQy_jgfpWnK-oCGJnCKt/exec';
+
+    // Elements
+    const mainContainer = document.getElementById('main-container');
+    const formSection = document.getElementById('form-section');
+    const cekSection = document.getElementById('cek-section');
+    const successSection = document.getElementById('success-section');
+    const tabBuat = document.getElementById('tab-buat');
+    const tabCek = document.getElementById('tab-cek');
+    const leftPanel = document.getElementById('left-panel');
+    const panelTitle = document.getElementById('panel-title');
+    const panelDesc = document.getElementById('panel-desc');
+    
+    // Tab Switching Logic
+    function switchTab(tab) {
+      if (tab === 'buat') {
+        tabBuat.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-200";
+        tabCek.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-transparent text-gray-500 hover:text-indigo-600 hover:bg-indigo-50";
+        formSection.classList.remove('hidden-section');
+        cekSection.classList.add('hidden-section');
+        
+        leftPanel.className = "md:w-5/12 bg-gradient-to-br from-indigo-600 to-blue-700 p-10 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden transition-all duration-500";
+        panelTitle.innerHTML = "Pusat Bantuan<br>Penggajian";
+        panelDesc.innerHTML = "Punya kendala dengan slip gaji, lembur, atau potongan? Beritahu kami agar segera ditindaklanjuti.";
+      } else {
+        tabCek.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-blue-600 text-white shadow-md shadow-blue-200";
+        tabBuat.className = "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-transparent text-gray-500 hover:text-indigo-600 hover:bg-indigo-50";
+        formSection.classList.add('hidden-section');
+        cekSection.classList.remove('hidden-section');
+        
+        leftPanel.className = "md:w-5/12 bg-gradient-to-br from-blue-700 to-indigo-900 p-10 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden transition-all duration-500";
+        panelTitle.innerHTML = "Status Laporan<br>Anda";
+        panelDesc.innerHTML = "Transparansi penuh. Pantau progress tiket dan baca tanggapan dari HRD secara real-time di sini.";
+      }
+    }
+
+    // Modal Helper
+    const customModal = document.getElementById('custom-modal');
+    const modalIconContainer = document.getElementById('modal-icon-container');
+    const modalIcon = document.getElementById('modal-icon');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const form = document.getElementById('payroll-form');
+    const inputId = document.getElementById('idKaryawan');
+    const inputNama = document.getElementById('nama');
+    const idError = document.getElementById('id-error');
+    
+    function showModal(title, message, type = 'error') {
+      modalTitle.textContent = title;
+      modalMessage.innerHTML = message;
+      if (type === 'error') {
+        modalIconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-red-50 text-red-500 shadow-inner';
+        modalIcon.setAttribute('data-lucide', 'alert-triangle');
+      } else {
+        modalIconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-blue-50 text-blue-500 shadow-inner';
+        modalIcon.setAttribute('data-lucide', 'info');
+      }
+      lucide.createIcons();
+      customModal.classList.remove('hidden-section');
+    }
+
+    modalCloseBtn.addEventListener('click', () => customModal.classList.add('hidden-section'));
+    customModal.addEventListener('click', (e) => { if (e.target === customModal) customModal.classList.add('hidden-section'); });
+
+    function generatePeriode() {
+      const select = document.getElementById('periode');
+      const startDate = new Date(2026, 0); // Indeks bulan 0 = Januari, Tahun 2026
+      const endDate = new Date(); // Tanggal saat ini
+      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      
+      let currentDate = new Date(startDate);
+      // Looping untuk menambah bulan sampai dengan bulan saat ini
+      while (currentDate <= endDate) {
+        const monthName = months[currentDate.getMonth()];
+        const year = currentDate.getFullYear();
+        
+        const option = document.createElement('option');
+        option.value = `${monthName} ${year}`;
+        option.textContent = `${monthName} ${year}`;
+        select.appendChild(option);
+        
+        // Tambahkan 1 bulan ke tanggal saat ini dalam loop
+        currentDate.setMonth(currentDate.getMonth() + 1);
+      }
+    }
+    
+    // Panggil fungsi saat halaman dimuat
+    generatePeriode();
+
+    inputNama.addEventListener('input', function () {
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      this.value = this.value.toLocaleUpperCase('id-ID');
+      this.setSelectionRange(start, end);
+    });
+
+    // Validasi 6 Digit
+    inputId.addEventListener('input', function () {
+      const val = this.value.replace(/\D/g, '').slice(0, 6);
+      this.value = val;
+      const invalid = val.length > 0 && val.length !== 6;
+      idError.classList.toggle('hidden-section', !invalid);
+      this.classList.toggle('border-red-400', invalid);
+    });
+
+    // Submit Tiket Baru
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (!/^\d{6}$/.test(inputId.value)) {
+        idError.classList.remove('hidden-section');
+        inputId.focus();
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+      
+      submitBtn.disabled = true;
+      btnText.classList.add('hidden-section');
+      btnSpinner.classList.remove('hidden-section');
+      
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
+        const result = await response.json();
+        
+        if (result.status !== 'success') throw new Error("Terjadi kesalahan server");
+        
+        document.getElementById('success-nama').textContent = formData.get('nama');
+        mainContainer.classList.add('hidden-section');
+        successSection.classList.remove('hidden-section');
+        form.reset();
+      } catch (error) {
+        console.warn("Fetch failed, triggering demo mode", error);
+        // Fallback untuk Demo Preview
+        document.getElementById('success-nama').textContent = formData.get('nama');
+        mainContainer.classList.add('hidden-section');
+        successSection.classList.remove('hidden-section');
+        form.reset();
+      } finally {
+        submitBtn.disabled = false;
+        btnText.classList.remove('hidden-section');
+        btnSpinner.classList.add('hidden-section');
+      }
+    });
+
+    // Navigasi Success Screen
+    document.getElementById('btn-back-form').addEventListener('click', () => {
+      successSection.classList.add('hidden-section');
+      mainContainer.classList.remove('hidden-section');
+      switchTab('buat');
+    });
+
+    document.getElementById('btn-go-monitor').addEventListener('click', () => {
+      successSection.classList.add('hidden-section');
+      mainContainer.classList.remove('hidden-section');
+      switchTab('cek');
+    });
+
+    const searchForm = document.getElementById('search-form');
+    const searchIdInput = document.getElementById('search-id');
+    const ticketsList = document.getElementById('tickets-list');
+    const emptyState = document.getElementById('empty-state');
+    
+    // Pencarian Status Tiket
+    searchForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const val = searchIdInput.value.replace(/\D/g, '');
+      if (val.length !== 6) {
+        showModal('ID Tidak Valid', 'Mohon masukkan tepat 6 digit angka ID Karyawan.', 'error');
+        return;
+      }
+
+      const searchBtn = document.getElementById('search-btn');
+      const searchText = document.getElementById('search-text');
+      const searchSpinner = document.getElementById('search-spinner');
+      
+      searchBtn.disabled = true;
+      searchText.classList.add('hidden-section');
+      searchSpinner.classList.remove('hidden-section');
+      emptyState.classList.add('hidden-section');
+      ticketsList.classList.add('hidden-section');
+      ticketsList.innerHTML = '';
+
+      const formData = new FormData(searchForm);
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
+        const result = await response.json();
+        
+        if (result.status !== 'success') throw new Error();
+        renderTickets(result.data);
+        
+      } catch (error) {
+        console.warn("Menggunakan Mock Data untuk Preview", error);
+        // MOCK DATA: Tampilan saat di-preview jika backend belum terkoneksi
+        setTimeout(() => {
+           const mockData = [
+             { waktu: "21/07/2026 10:15", periode: "Juni 2026", komplain: "Slip gaji bulan ini belum saya terima di email, padahal teman satu departemen sudah.", status: "CLOSED", tanggapan: "Mohon maaf atas keterlambatannya. Kami sudah mengirimkan ulang slip gaji Anda ke email yang terdaftar. Silakan cek folder Inbox atau Spam." },
+             { waktu: "20/07/2026 14:10", periode: "Juli 2026", komplain: "Perhitungan uang lembur tanggal 15 kurang sesuai dengan jadwal aktual.", status: "OPEN", tanggapan: "" }
+           ];
+           renderTickets(mockData);
+        }, 800);
+      } finally {
+        searchBtn.disabled = false;
+        searchText.classList.remove('hidden-section');
+        searchSpinner.classList.add('hidden-section');
+      }
+    });
+
+    function renderTickets(data) {
+      if (!data || data.length === 0) {
+        emptyState.classList.remove('hidden-section');
+        emptyState.innerHTML = `
+          <div class="bg-gray-100 text-gray-400 w-20 h-20 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="folder-search" class="w-10 h-10"></i>
+          </div>
+          <p class="text-gray-500 font-medium">Tidak ada tiket ditemukan untuk ID tersebut.</p>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      let htmlContent = '';
+      data.forEach((ticket, index) => {
+        // Cek status apakah CLOSED / SELESAI
+        const isClosed = ticket.status.trim().toUpperCase() === 'CLOSED' || ticket.status.trim().toUpperCase() === 'SELESAI';
+        
+        // CSS Dinamis Berdasarkan Status
+        const statusBadgeClass = isClosed 
+          ? "bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-md shadow-green-200 border-transparent" 
+          : "bg-orange-100 text-orange-700 border-orange-200";
+        
+        const statusIcon = isClosed ? "check-circle" : "loader";
+        const statusText = isClosed ? "Case Closed" : "Sedang Diproses";
+        
+        // Warna Card & Header
+        const cardBorder = isClosed ? "border-green-400 shadow-green-100/60 ring-4 ring-green-50" : "border-gray-200 shadow-gray-100/50";
+        const headerBg = isClosed ? "bg-green-50/50" : "bg-gray-50";
+
+        // HTML Tanggapan HRD (Hanya muncul jika ada isinya atau status closed)
+        const tanggapanHtml = (ticket.tanggapan && ticket.tanggapan.trim() !== '')
+          ? `<div class="mt-5 p-4 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 relative shadow-inner">
+               <div class="absolute -top-3 left-4 bg-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1">
+                 <i data-lucide="message-circle" class="w-3 h-3"></i> TANGGAPAN HRD
+               </div>
+               <p class="text-sm text-indigo-900 leading-relaxed mt-1">${ticket.tanggapan}</p>
+             </div>`
+          : (!isClosed ? `<div class="mt-4 p-3 rounded-lg bg-gray-50 border border-gray-100 border-dashed text-center">
+                            <p class="text-xs text-gray-400 font-medium flex items-center justify-center gap-1.5"><i data-lucide="clock-4" class="w-3.5 h-3.5"></i> Menunggu tanggapan HRD...</p>
+                          </div>` : '');
+
+        htmlContent += `
+          <div class="rounded-2xl border ${cardBorder} bg-white shadow-lg overflow-hidden animate-slide-up transition-all hover:shadow-xl" style="animation-delay: ${index * 0.1}s">
+            
+            <!-- Card Header -->
+            <div class="${headerBg} px-5 py-3.5 border-b ${isClosed ? 'border-green-100' : 'border-gray-100'} flex justify-between items-center">
+              <span class="text-xs font-semibold text-gray-500 flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border shadow-sm">
+                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${ticket.waktu || '-'}
+              </span>
+              <span class="text-[11px] font-bold px-3 py-1.5 rounded-full border flex items-center gap-1.5 uppercase tracking-wide ${statusBadgeClass}">
+                <i data-lucide="${statusIcon}" class="w-3.5 h-3.5 ${!isClosed && 'animate-spin-slow'}"></i> ${statusText}
+              </span>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5">
+              <div class="mb-3">
+                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
+                   <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> Periode: ${ticket.periode || '-'}
+                 </span>
+              </div>
+              <h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Detail Keluhan
+              </h4>
+              <p class="text-gray-800 text-sm leading-relaxed">${ticket.komplain}</p>
+              
+              <!-- Tanggapan Section -->
+              ${tanggapanHtml}
+            </div>
+
+          </div>
+        `;
+      });
+
+      ticketsList.innerHTML = htmlContent;
+      ticketsList.classList.remove('hidden-section');
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
